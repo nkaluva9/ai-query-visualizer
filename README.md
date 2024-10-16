@@ -23,9 +23,9 @@ To run this demo, follow the steps below to configure the OpenAI chat applicatio
 ### Configuring AIQueryVisualizer Project
 To configure the AIQueryVisualizer project, follow these steps:
 
-1. **Clone the repository** from [GitHub](https://github.com/nhcloud/aiqueryvisualizer):
+1. **Clone the repository** from [GitHub](https://github.com/nhcloud/ai-query-visualizer):
    ```bash
-   git clone https://github.com/nhcloud/aiqueryvisualizer
+   git clone https://github.com/nhcloud/ai-query-visualizer
    ```
 
 2. **Open** the `AIQueryVisualizer.sln` solution in your preferred IDE.
@@ -57,6 +57,7 @@ Now, you can experiment with both **KQL** and **SQL** (SQL API) queries by inter
 - **C# / .NET Core**: Backend logic and query execution.
 - **Blazor**: For building interactive UI components.
 - **Azure OpenAI**: For processing user prompts and generating KQL and SQL queries.
+- **Azure Speech Service**: For processing user prompt from speech to text.
 - **Log Analytics**: For executing KQL queries.
 - **CosmosDB**: For executing SQL queries.
 
