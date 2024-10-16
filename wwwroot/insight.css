@@ -1,0 +1,104 @@
+#myChart {
+    width: 800px;
+    height: 800px;
+}
+
+.form-container {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 30px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+label {
+    font-weight: bold;
+    color: #333;
+}
+
+.oval-input {
+    border-radius: 50px 0 0 50px; /* Only round the left side for oval shape */
+    padding: 10px 20px;
+    border: 1px solid #ced4da;
+    width: 100%;
+    box-sizing: border-box;
+    border-right: none; /* Remove the right border to blend with the button */
+}
+
+.mic-button {
+    cursor: pointer;
+    background-color: #007bff;
+    border: 1px solid #ced4da; /* Match the border with the input */
+    border-radius: 0 50px 50px 0; /* Oval shape for the right side */
+    padding: 10px;
+    color: white;
+    font-size: 20px;
+}
+
+.mic-listening {
+    width: 20px;
+    height: 20px;
+}
+
+.input-group {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+}
+
+.form-select {
+    border-radius: 50px;
+    padding: 10px 20px;
+    border: 1px solid #ced4da;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-control:focus, .mic-button:focus {
+    box-shadow: none;
+    border-color: #007bff;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+}
+
+    .btn-primary:disabled {
+        background-color: #cccccc;
+    }
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+    .form-group.inline {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+        .form-group.inline > * {
+            width: 48%; /* Ensure both elements take up 48% width each */
+        }
+
+.loading-text {
+    font-style: italic;
+    color: gray;
+}

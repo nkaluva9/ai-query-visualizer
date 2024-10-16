@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35222.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AIQueryVisualizer", "AIQueryVisualizer.csproj", "{AEC2B7E8-1AD3-4051-BB31-B7082AD2981E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AEC2B7E8-1AD3-4051-BB31-B7082AD2981E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEC2B7E8-1AD3-4051-BB31-B7082AD2981E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEC2B7E8-1AD3-4051-BB31-B7082AD2981E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEC2B7E8-1AD3-4051-BB31-B7082AD2981E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {55B515C0-DC3C-42A1-BE4D-38306FF1820F}
+	EndGlobalSection
+EndGlobal

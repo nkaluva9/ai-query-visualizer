@@ -1,0 +1,292 @@
+﻿@page "/insights/{queryType}"
+@rendermode InteractiveServer
+@using AIQueryVisualizer.Models
+@using AIQueryVisualizer.Services
+@inject IJSRuntime JSRuntime
+@inject QueryServiceFactory QueryServiceFactory
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/microsoft-cognitiveservices-speech-sdk/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
+@if (QueryType == "KQL")
+{
+    <h1>Execute Custom Query in Azure Log Analytics Workspace</h1>
+}
+else
+{
+    <h1>Execute Custom Query in Azure Cosmos DB SQL API</h1>
+}
+<div class="form-container">
+    <h2>Query Execution Form</h2>
+    <div class="container mt-4">
+        <div class="form-group">
+            <label for="queryInput">Enter your query:</label>
+            <div class="input-group">
+                <input type="text" @bind="UserInput" @ref="queryInputRef" class=" form-control oval-input" id="queryInput" placeholder="Enter a query to send to the bot" />
+                <button id="micButton" class="mic-button" onclick="startAzureSpeechToText()">
+                    <img id="micImage" class="mic-listening" src="https://img.icons8.com/ios-filled/50/ffffff/microphone.png" alt="Mic">
+                </button>
+            </div>
+        </div>
+
+        <div class="form-group inline">
+            <label for="chartType">Select Chart Type:</label>
+            <select @bind="SelectedChartType" class="form-control form-select" id="chartType">
+                <option value="bar">Bar</option>
+                <option value="line">Line</option>
+                <option value="pie">Pie</option>
+                <option value="doughnut">Doughnut</option>
+            </select>
+        </div>
+
+        <button @onclick="CreateChatAndExecuteQuery" class="btn btn-primary" disabled="@IsLoading">Run Query</button>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+@if (IsLoading)
+{
+    <div class="alert alert-info text-center">
+        <p>Loading...</p>
+    </div>
+}
+else if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <div class="alert alert-danger text-center">
+        <p>@ErrorMessage</p>
+    </div>
+}
+else if (Results.Count > 0)
+{
+    <div class="results-container mt-4">
+        <h4 class="mb-3 text-primary">Results Table</h4>
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    @foreach (var column in Columns)
+                    {
+                        <th>@column</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var result in Results)
+                {
+                    <tr>
+                        @foreach (var value in result.Values)
+                        {
+                            <td>@value.Value</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <h4 class="mb-3 text-primary">Results Chart</h4>
+        <div class="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+}
+<script src="insight.js"></script>
+@code {
+    [Parameter] public string QueryType { get; set; }
+    private bool IsLoading { get; set; }
+    private string? ErrorMessage { get; set; }
+    private static string UserInput { get; set; } = string.Empty;
+    private List<string> Columns { get; set; } = [];
+    private List<ResultRow> Results { get; set; } = [];
+    private ChartJsData? ChartData { get; set; }
+    private string SelectedChartType { get; set; } = "bar";
+    private bool shouldRenderChart = false;
+    private ElementReference queryInputRef;
+    private IQueryService ChatService;
+
+    protected override void OnInitialized()
+    {
+        ChatService = QueryServiceFactory.GetQueryService(QueryType); 
+    }
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        // Only render the chart if we explicitly requested it
+        if (shouldRenderChart && !string.IsNullOrEmpty(ChartData?.Type))
+        {
+            shouldRenderChart = false; // Reset the flag after rendering
+            return RenderChartAsync();
+        }
+        return Task.CompletedTask;
+    }
+
+    [JSInvokable]
+    public static Task UpdateUserInput(string userInput)
+    {
+        UserInput = userInput;
+        return Task.CompletedTask;
+    }
+
+    private async Task CreateChatAndExecuteQuery()
+    {
+        IsLoading = true;
+        ErrorMessage = null;
+        Results.Clear();
+        Columns.Clear();
+
+        try
+        {
+            var chatSessionId = await ChatService.CreateChatSessionAsync();
+            if (string.IsNullOrEmpty(chatSessionId))
+            {
+                ErrorMessage = "Failed to create a chat session.";
+                return;
+            }
+
+            var statement = await ChatService.PostChatMessageAsync(chatSessionId, UserInput);
+            if (string.IsNullOrEmpty(statement))
+            {
+                ErrorMessage = "Failed to retrieve KQL statement from chat session.";
+                return;
+            }
+
+            var insightsResults = await ChatService.ExecuteQueryAsync(statement);
+            if (!insightsResults.Any())
+            {
+                ErrorMessage = "No results found for the query.";
+                return;
+            }
+
+            Columns = insightsResults.First().Values.Keys.ToList();
+            Results = insightsResults;
+
+            UpdateChartData(insightsResults);
+
+            shouldRenderChart = true;
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"An error occurred: {ex.Message}";
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private void UpdateChartData(List<ResultRow> results)
+    {
+        if (Columns.Count < 2)
+        {
+            ErrorMessage = "Cannot create chart: insufficient columns available.";
+            return;
+        }
+
+        var firstColumn = Columns[0]; // Labels
+        var numericColumn = ""; // Data
+
+        foreach (var column in Columns)
+        {
+            var isNumeric = true;
+
+            foreach (var result in results)
+            {
+                if (result.Values.TryGetValue(column, out var value) && !double.TryParse(value.ToString(), out _))
+                {
+                    isNumeric = false;
+                    break;
+                }
+            }
+
+            if (!isNumeric) continue;
+            numericColumn = column;
+            break;
+        }
+
+        if (string.IsNullOrEmpty(numericColumn))
+        {
+            ErrorMessage = "Cannot create chart: no numeric column found.";
+            return;
+        }
+
+        var labels = new List<string>();
+        var dataValues = new List<double>();
+
+        foreach (var result in results)
+        {
+            if (result.Values.TryGetValue(firstColumn, out var labelValue) &&
+                result.Values.TryGetValue(numericColumn, out var dataValue))
+            {
+                labels.Add(labelValue.ToString() ?? string.Empty);
+                if (double.TryParse(dataValue.ToString(), out var numericValue))
+                {
+                    dataValues.Add(numericValue);
+                }
+                else
+                {
+                    dataValues.Add(0);
+                }
+            }
+        }
+
+        ChartData = new ChartJsData
+            {
+                Labels = labels.ToArray(),
+                Data = dataValues.ToArray(),
+                Label = numericColumn,
+                Type = SelectedChartType
+            };
+    }
+
+    private async Task RenderChartAsync()
+    {
+        if (ChartData == null)
+        {
+            return;
+        }
+
+        var backgroundColors = ChartData.Type is "pie" or "doughnut" ? Utilities.GenerateRandomColors(ChartData.Data.Length) : new[] { "rgba(54, 162, 235, 0.2)" };
+
+        try
+        {
+
+            await JSRuntime.InvokeVoidAsync("renderChart", "myChart", new
+            {
+                type = ChartData.Type,
+                data = new
+                {
+                    labels = ChartData.Labels,
+                    datasets = new[]
+                    {
+                        new
+                        {
+                            label = ChartData.Label,
+                            data = ChartData.Data,
+                            backgroundColor = backgroundColors,
+                            borderColor = backgroundColors.Select(color => color.Replace("0.2", "1")).ToArray(),
+                            borderWidth = 1
+                        }
+                    }
+                },
+                options = new
+                {
+                    scales = new
+                    {
+                        yAxes = new[]
+                        {
+                            new
+                            {
+                                ticks = new
+                                {
+                                    beginAtZero = true
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        catch (JSException jsEx)
+        {
+            Console.WriteLine($"JavaScript error: {jsEx.Message}");
+            ErrorMessage = $"JavaScript error: {jsEx.Message}";
+        }
+    }
+}
