@@ -2,7 +2,7 @@ const queryInput = document.getElementById('queryInput');
 const micButton = document.getElementById('micButton');
 const micImage = document.getElementById('micImage');
 // Replace these with your Azure Speech Service API key and region
-const azureSpeechKey = '24f9eece04fc43ccb47fc93dbebfcbd2';
+const azureSpeechKey = '';
 const azureRegion = 'eastus2';
 
 function renderChart(chartId, chartData, chartOptions) {
@@ -18,19 +18,6 @@ function renderChart(chartId, chartData, chartOptions) {
     });
 }
 
-function renderChart2(chartId, chartData, chartOptions) {
-    var ctx = document.getElementById(chartId);
-    if (ctx) {
-        ctx = ctx.getContext('2d');
-        new Chart(ctx, {
-            type: chartData.type,
-            data: chartData.data,
-            options: chartOptions
-        });
-    } else {
-        console.error("Canvas element not found:", chartId);
-    }
-}
 function startAzureSpeechToText() {
     if (!azureSpeechKey || !azureRegion) {
         alert('Please set your Azure Speech Key and Region.');
