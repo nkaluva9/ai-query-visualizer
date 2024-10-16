@@ -1,0 +1,168 @@
+﻿@page "/"
+
+<PageTitle>AI Query Visualizer</PageTitle>
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .container {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 900px;
+        margin: 40px auto;
+    }
+
+    h1 {
+        color: #333;
+        text-align: center;
+        font-size: 32px;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    h2 {
+        color: #555;
+        text-align: left;
+        font-size: 26px;
+        margin-top: 20px;
+        margin-bottom: 15px;
+    }
+
+    p {
+        color: #666;
+        font-size: 18px;
+        line-height: 1.8;
+        margin-bottom: 20px;
+    }
+
+    ol {
+        margin: 20px 0;
+        padding-left: 40px;
+    }
+
+    li {
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+
+    a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    pre {
+        background-color: #f0f0f0;
+        padding: 15px;
+        border-radius: 6px;
+        font-size: 14px;
+        overflow-x: auto;
+        border-left: 5px solid #007bff;
+    }
+
+    code {
+        font-family: 'Courier New', Courier, monospace;
+        background-color: #f0f0f0;
+        padding: 2px 5px;
+        border-radius: 3px;
+    }
+
+    .highlight {
+        background-color: #d1ecf1;
+        border: 1px solid #bee5eb;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+    }
+
+    media (max-width: 768px) {
+        .container {
+            padding: 15px;
+        }
+
+        h1 {
+            font-size: 28px;
+        }
+
+        h2 {
+            font-size: 22px;
+        }
+
+        p, li {
+            font-size: 16px;
+        }
+    }
+</style>
+
+<div class="container">
+    <h1>AI Query Visualizer (KQL and SQL)</h1>
+
+    <h2>Overview</h2>
+    <p>
+        The <strong>AI Query Visualizer</strong> demo showcases how you can use OpenAI GPT-4o to convert user prompts into KQL queries and execute them against a Log Analytics workspace. It also supports SQL (SQL API) queries, offering powerful query capabilities from a simple user prompt.
+    </p>
+
+    <h2>How to Run This Sample</h2>
+
+    <h2>How to Configure OpenAI Chat Application</h2>
+    <ol>
+        <li>
+            <strong>Clone the repository</strong> from
+            <a href="https://github.com/microsoft/chat-copilot" target="_blank">https://github.com/microsoft/chat-copilot</a>:
+            <pre><code>git clone https://github.com/microsoft/chat-copilot</code></pre>
+        </li>
+        <li><strong>Open</strong> the <code>CopilotChat.sln</code> solution in your preferred IDE.</li>
+        <li><strong>Navigate to</strong> the <code>CopilotChatWebApi</code> project.</li>
+        <li><strong>Open</strong> the <code>appsettings.json</code> file.</li>
+        <li>
+            <strong>Update</strong> the <code>AzureOpenAIText</code> and <code>AzureOpenAIEmbedding</code> values under the <strong>KernelMemory</strong> section.
+        </li>
+        <li><strong>Launch</strong> the <code>CopilotChatWebApi</code> project.</li>
+    </ol>
+
+    <h2>Configuring AIQueryVisualizer Project</h2>
+    <ol>
+        <li>
+            <strong>Clone the repository</strong> from
+            <a href="https://github.com/nhcloud/aiqueryvisualizer" target="_blank">https://github.com/nhcloud/aiqueryvisualizer</a>:
+            <pre><code>git clone https://github.com/nhcloud/aiqueryvisualizer</code></pre>
+        </li>
+        <li><strong>Open</strong> the <code>AIQueryVisualizer.sln</code> solution in your preferred IDE.</li>
+        <li><strong>Open</strong> the <code>appsettings.json</code> file.</li>
+        <li>
+            <strong>Update</strong> the <code>Chat</code>, <code>LogAnalytics</code>, and <code>CosmosDB</code> values under the appropriate sections:
+            <pre><code>
+                "Chat": {
+                    "Endpoint": "[Chat Base endpoint]"
+                },
+                "LogAnalytics": {
+                    "WorkspaceId": "[WorkspaceId]",
+                    "TenantId": "[TenantId]",
+                    "ClientId": "[ClientId]",
+                    "ClientSecret": "[ClientSecret]"
+                },
+                "CosmosDB": {
+                    "Endpoint": "[CosmosDB Endpoint]",
+                    "Key": "[Key]",
+                    "DatabaseId": "[DatabaseId]",
+                    "ContainerId": "[ContainerName]"
+                }
+            </code></pre>
+        </li>
+        <li><strong>Launch</strong> the AIQueryVisualizer project.</li>
+    </ol>
+
+    <p>
+        Now, you can experiment with both <strong>KQL</strong> and <strong>SQL</strong> (SQL API) queries.
+    </p>
+</div>
