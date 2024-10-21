@@ -57,9 +57,9 @@
         text-decoration: none;
     }
 
-    a:hover {
-        text-decoration: underline;
-    }
+        a:hover {
+            text-decoration: underline;
+        }
 
     pre {
         background-color: #f0f0f0;
@@ -86,21 +86,24 @@
     }
 
     media (max-width: 768px) {
-        .container {
-            padding: 15px;
-        }
+        .container
 
-        h1 {
-            font-size: 28px;
-        }
+    {
+        padding: 15px;
+    }
 
-        h2 {
-            font-size: 22px;
-        }
+    h1 {
+        font-size: 28px;
+    }
 
-        p, li {
-            font-size: 16px;
-        }
+    h2 {
+        font-size: 22px;
+    }
+
+    p, li {
+        font-size: 16px;
+    }
+
     }
 </style>
 
@@ -109,7 +112,7 @@
 
     <h2>Overview</h2>
     <p>
-        The <strong>AI Query Visualizer</strong> demo showcases how you can use OpenAI GPT-4o to convert user prompts into KQL queries and execute them against a Log Analytics workspace. It also supports SQL (SQL API) queries, offering powerful query capabilities from a simple user prompt.
+        The <strong>AI Query Visualizer</strong> demo showcases how you can use OpenAI GPT-4o to convert user prompts into KQL queries and execute them against a Log Analytics workspace. It also supports SQL (SQL API) queries, offering powerful query capabilities from a simple user prompt. The demo leverages a system description to set a meta prompt (persona) for the chat session. Make sure to adjust the system description fields based on your data source and expected output. For chart display, it should return at least two columns, with one column being numeric; otherwise, it will display the result in a grid format.
     </p>
 
     <h2>How to Run This Sample</h2>
@@ -134,8 +137,8 @@
     <ol>
         <li>
             <strong>Clone the repository</strong> from
-            <a href="https://github.com/nhcloud/aiqueryvisualizer" target="_blank">https://github.com/nhcloud/aiqueryvisualizer</a>:
-            <pre><code>git clone https://github.com/nhcloud/aiqueryvisualizer</code></pre>
+            <a href="https://github.com/nhcloud/ai-query-visualizer" target="_blank">https://github.com/nhcloud/ai-query-visualizer</a>:
+            <pre><code>git clone https://github.com/nhcloud/ai-query-visualizer</code></pre>
         </li>
         <li><strong>Open</strong> the <code>AIQueryVisualizer.sln</code> solution in your preferred IDE.</li>
         <li><strong>Open</strong> the <code>appsettings.json</code> file.</li>
@@ -160,6 +163,14 @@
                     "SystemDescription": "[Meta prompt description]"
                 }
             </code></pre>
+            <pre>
+            <strong> Keyless Connection Mode</strong>
+
+                To leverage <strong>keyless connection</strong> mode (with Azure local authentication disabled):
+
+                - For <strong>Log Analytics, </strong> the `TenantId`, `ClientId`, and `ClientSecret` fields empty.
+                - For <strong>CosmosDB</strong>, Leave the `Key` field empty.        
+            </pre>
         </li>
         <li><strong>Launch</strong> the AIQueryVisualizer project.</li>
     </ol>
