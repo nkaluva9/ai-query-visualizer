@@ -2,7 +2,7 @@
 # AI Query Visualizer (KQL and SQL)
 
 ## Overview
-The **AI Query Visualizer** demo showcases how you can use OpenAI GPT-4o to convert user prompts into KQL queries and execute them against a Log Analytics workspace. It also supports SQL (SQL API) queries, offering powerful query capabilities from a simple user prompt. The demo leverages a system description to set a meta prompt (persona) for the chat session. Make sure to adjust the system description fields based on your data source and expected output. For chart display, it should return at least two columns, with one column being numeric; otherwise, it will display the result in a grid format.
+The **AI Query Visualizer** demo showcases how you can use OpenAI GPT-4 to convert user prompts into KQL queries and execute them against a Log Analytics workspace. It also supports SQL (SQL API) queries, enabling powerful query capabilities from a simple user prompt. The demo leverages a system description to set a meta prompt (persona) using the Semantic Kernel for the chat session. Make sure to adjust the system description fields based on your data source and expected output. For chart display, the query should return at least two columns, with one being numeric; otherwise, the results will be displayed in a grid format.
 ## How to Run This Sample
 
 ### How to Configure OpenAI Chat Application
