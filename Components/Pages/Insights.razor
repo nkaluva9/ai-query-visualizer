@@ -3,6 +3,7 @@
 @using AIQueryVisualizer.Models
 @using AIQueryVisualizer.Services
 @inject IJSRuntime JSRuntime
+@inject NavigationManager Navigation
 @inject QueryServiceFactory QueryServiceFactory
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -87,7 +88,7 @@ else if (Results.Count > 0)
         </div>
     </div>
 }
-<script src="insight.js"></script>
+<script src="insight.js?q=@QueryType"></script>
 @code {
     [Parameter] public string QueryType { get; set; }
     private bool IsLoading { get; set; }
@@ -100,10 +101,23 @@ else if (Results.Count > 0)
     private bool shouldRenderChart = false;
     private ElementReference queryInputRef;
     private IQueryService ChatService;
+    private string previousQueryType;
 
+    protected override async Task OnParametersSetAsync()
+    {
+        // if (!string.IsNullOrEmpty(previousQueryType) && !string.IsNullOrEmpty(QueryType) && QueryType != previousQueryType)
+        // {
+        //     UserInput = "";
+        //     previousQueryType = QueryType;
+        //     // Use JSRuntime to reload the page with the new URL
+        //     var newUrl = $"/insights/{QueryType}";
+        //     await JSRuntime.InvokeVoidAsync("eval", $"window.location.href='{newUrl}'");
+        //     //Navigation.NavigateTo($"/insights/{QueryType}", forceLoad: true);
+        // }
+    }
     protected override void OnInitialized()
     {
-        ChatService = QueryServiceFactory.GetQueryService(QueryType); 
+        ChatService = QueryServiceFactory.GetQueryService(QueryType);
     }
     protected override Task OnAfterRenderAsync(bool firstRender)
     {
