@@ -84,7 +84,16 @@ else if (Results.Count > 0)
 
         <h4 class="mb-3 text-primary">Results Chart</h4>
         <div class="chart-container">
-            <canvas id="myChart"></canvas>
+            @if (!string.IsNullOrEmpty(ChartErrorMessage))
+            {
+                <div class="alert alert-danger text-center">
+                    <p>@ChartErrorMessage</p>
+                </div>
+            }
+            else
+            {
+                <canvas id="myChart"></canvas>
+            }
         </div>
     </div>
 }
@@ -93,6 +102,7 @@ else if (Results.Count > 0)
     [Parameter] public string QueryType { get; set; }
     private bool IsLoading { get; set; }
     private string? ErrorMessage { get; set; }
+    private string? ChartErrorMessage { get; set; }
     private static string UserInput { get; set; } = string.Empty;
     private List<string> Columns { get; set; } = [];
     private List<ResultRow> Results { get; set; } = [];
@@ -189,7 +199,7 @@ else if (Results.Count > 0)
     {
         if (Columns.Count < 2)
         {
-            ErrorMessage = "Cannot create chart: insufficient columns available.";
+            ChartErrorMessage = "Cannot create chart: insufficient columns available.";
             return;
         }
 
@@ -216,7 +226,7 @@ else if (Results.Count > 0)
 
         if (string.IsNullOrEmpty(numericColumn))
         {
-            ErrorMessage = "Cannot create chart: no numeric column found.";
+            ChartErrorMessage = "Cannot create chart: no numeric column found.";
             return;
         }
 
@@ -300,7 +310,7 @@ else if (Results.Count > 0)
         catch (JSException jsEx)
         {
             Console.WriteLine($"JavaScript error: {jsEx.Message}");
-            ErrorMessage = $"JavaScript error: {jsEx.Message}";
+            ChartErrorMessage = $"JavaScript error: {jsEx.Message}";
         }
     }
 }

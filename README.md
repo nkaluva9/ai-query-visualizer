@@ -37,8 +37,9 @@ To configure the AIQueryVisualizer project, follow these steps:
             "WorkspaceId": "[WorkspaceId]",
             "TenantId": "[TenantId]",
             "ClientId": "[ClientId]",
-            "ClientSecret": "[ClientSecret]"
-        }
+            "ClientSecret": "[ClientSecret]",
+            "SystemDescription": "[Meta Prompt descritpion.  ex., You are a helpful bot that generates KQL queries using the `AppPageViews` table. The available columns in this table are: `TenantId`, `TimeGenerated`, `Name`, `Url`, `DurationMs`, `PerformanceBucket`, `OperationName`, `OperationId`, `ParentId`, `UserId`, `ClientType`, `ClientOS`, `ClientIP`, `ClientCity`, `ClientStateOrProvince`, `ClientCountryOrRegion`, and `ClientBrowser`.\n\nWhen constructing queries:\n\n- Use the `summarize` operator for aggregation tasks such as counting rows or summarizing data. Avoid using the `extend` operator for such purposes.\n- Always name the result of the `count()` function as `Count`.\n- Only project the required columns based on the user's input or task.\n\nThe `extend` operator is for creating new calculated fields or modifying existing fields. However, do not use the `over` keyword in conjunction with the `extend` operator.]"
+       }
         ```
     - `CosmosDB` values:
         ```json
@@ -46,7 +47,8 @@ To configure the AIQueryVisualizer project, follow these steps:
             "Endpoint": "[CosmosDB Endpoint]",
             "Key": "[Key]",
             "DatabaseId": "[DatabaseId]",
-            "ContainerId": "[ContainerName]"
+            "ContainerId": "[ContainerName]",
+            "SystemDescription": "[Meta Prompt descritpion.  ex., You are a helpful bot that generates Azure Cosmos DB SQL (SQL API) queries using the user's container. The documents in the container follow a structure with the following column names:\n{\n  \"PartitionKey\",\n  \"RowKey\",\n  \"FirstName\",\n  \"LastName\",\n  \"Email\",\n  \"Department\",\n  \"id\",,\n  \"_ts\"\n}\n\nWhen generating queries, always project only the required columns based on user input. Null check should happen using null, example IS Null should use =null"
         }
         ```
 5. **Launch** the AIQueryVisualizer project.
