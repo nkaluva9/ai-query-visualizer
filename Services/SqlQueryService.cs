@@ -3,7 +3,7 @@
 namespace AIQueryVisualizer.Services;
 
 public class SqlQueryService(HttpClient httpClient, IConfiguration configuration, Container container, ILogger<SqlQueryService> logger)
-    : QueryService<SqlQueryService>(httpClient, configuration, logger)
+    : QueryService<SqlQueryService>(httpClient, configuration, logger, QueryType.Sql)
 {
     public override async Task<List<ResultRow>> ExecuteQueryAsync(string? statement)
     {

@@ -1,7 +1,7 @@
 ﻿namespace AIQueryVisualizer.Services;
 
 public class KqlQueryService(HttpClient httpClient, IConfiguration configuration, ILogger<KqlQueryService> logger)
-    : QueryService<KqlQueryService>(httpClient, configuration, logger)
+    : QueryService<KqlQueryService>(httpClient, configuration, logger, QueryType.Kql )
 {
     public override async Task<List<ResultRow>> ExecuteQueryAsync(string? statement)
     {
