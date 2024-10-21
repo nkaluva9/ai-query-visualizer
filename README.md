@@ -2,8 +2,7 @@
 # AI Query Visualizer (KQL and SQL)
 
 ## Overview
-The **AI Query Visualizer** demo showcases how you can use OpenAI GPT-4 to convert user prompts into KQL queries and execute them against a Log Analytics workspace. It also supports SQL (SQL API) queries, offering powerful query capabilities from a simple user prompt.
-
+The **AI Query Visualizer** demo showcases how you can use OpenAI GPT-4o to convert user prompts into KQL queries and execute them against a Log Analytics workspace. It also supports SQL (SQL API) queries, offering powerful query capabilities from a simple user prompt. The demo leverages a system description to set a meta prompt (persona) for the chat session. Make sure to adjust the system description fields based on your data source and expected output. For chart display, it should return at least two columns, with one column being numeric; otherwise, it will display the result in a grid format.
 ## How to Run This Sample
 
 ### How to Configure OpenAI Chat Application
@@ -51,6 +50,14 @@ To configure the AIQueryVisualizer project, follow these steps:
             "SystemDescription": "[Meta Prompt descritpion.  ex., You are a helpful bot that generates Azure Cosmos DB SQL (SQL API) queries using the user's container. The documents in the container follow a structure with the following column names:\n{\n  \"PartitionKey\",\n  \"RowKey\",\n  \"FirstName\",\n  \"LastName\",\n  \"Email\",\n  \"Department\",\n  \"id\",,\n  \"_ts\"\n}\n\nWhen generating queries, always project only the required columns based on user input. Null check should happen using null, example IS Null should use =null"
         }
         ```
+    ## Keyless Connection Mode
+
+    To leverage **keyless connection** mode (with Azure local authentication disabled):
+
+    - For **Log Analytics**, Leave the `TenantId`, `ClientId`, and `ClientSecret` fields empty.
+    - For **CosmosDB**, Leave the `Key` field empty.
+
+    In both cases, the connection will be established using `AzureDefaultCredentials`. Ensure that the app identity has the required permissions granted.
 5. **Launch** the AIQueryVisualizer project.
 
 Now, you can experiment with both **KQL** and **SQL** (SQL API) queries by interacting with the app's interface.
